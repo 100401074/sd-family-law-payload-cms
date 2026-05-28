@@ -43,7 +43,10 @@ EXPOSE 3000
 ENV PORT=3000
 ENV HOSTNAME=0.0.0.0
 
-# No HEALTHCHECK directive — Coolify proxy routes requests once the container is
-# up; Next.js standalone has no quick healthcheck endpoint that doesn't redirect.
+# Node-based TCP healthcheck — doesn't care about redirects, just verifies the
+# Next.js server is accepting connections on port 3000. start-period gives the
+# DB-init + JIT-warm enough time before the first check fires.
+HEALTHCHECK --interval=15s --timeout=10s --start-period=120s --retries=5 \
+  CMD node -e "require('http').get('http://localhost:3000/', (r) => process.exit(0)).on('error', () => process.exit(1))" || exit 1
 
 CMD ["node", "server.js"]
