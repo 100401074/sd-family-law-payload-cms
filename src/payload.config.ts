@@ -36,6 +36,9 @@ export default buildConfig({
     pool: {
       connectionString: process.env.DATABASE_URI || '',
     },
+    // Auto-sync schema with collection definitions. Set to false once you
+    // start using explicit migrations (recommended for long-term production).
+    push: process.env.PAYLOAD_DB_PUSH !== 'false',
   }),
   sharp,
   cors: process.env.CORS_ORIGINS?.split(',').map((s) => s.trim()) ?? '*',
