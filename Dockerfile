@@ -8,13 +8,17 @@ WORKDIR /app
 # Sharp needs libc6-compat on alpine, plus build tooling for native modules
 RUN apk add --no-cache libc6-compat python3 make g++
 
-# Install dependencies
+# Install dependencies — keep NODE_ENV unset so devDependencies (typescript,
+# @types/*) install too; they're needed for Next.js type-checking at build.
 COPY package.json package-lock.json* ./
-RUN npm install --no-audit --no-fund --legacy-peer-deps
+# --include=dev forces devDependencies even when Coolify injects NODE_ENV=production
+# via build ARGs; typescript + @types/* are needed for Next.js type-checking.
+RUN npm install --no-audit --no-fund --legacy-peer-deps --include=dev
 
 # Copy source + build
 COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
+# Build needs prod mode for proper bundling, but we'll switch back after.
 ENV NODE_ENV=production
 
 # Build placeholders — replaced at runtime
