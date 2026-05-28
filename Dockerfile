@@ -4,14 +4,24 @@
 FROM node:22-alpine AS builder
 WORKDIR /app
 
-# Install dependencies
+# Sharp needs libc6-compat on alpine, plus build tooling for native modules
+RUN apk add --no-cache libc6-compat python3 make g++
+
+# Install dependencies (legacy-peer-deps tolerates React 19 / Payload 3 peer mismatches)
 COPY package.json package-lock.json* ./
-RUN npm install --no-audit --no-fund
+RUN npm install --no-audit --no-fund --legacy-peer-deps
 
 # Build the Next.js + Payload app
 COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV PAYLOAD_DISABLE_ADMIN=false
+
+# Payload requires DATABASE_URI present at build time for type generation; provide
+# a placeholder so the build can run without an actual DB. Real connection string
+# is injected at runtime.
+ENV DATABASE_URI=postgres://placeholder:placeholder@localhost:5432/placeholder
+ENV PAYLOAD_SECRET=build-time-placeholder-replaced-at-runtime
+
 RUN npm run build
 
 # ---------- Runtime stage ----------
