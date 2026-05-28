@@ -36,9 +36,11 @@ export default buildConfig({
     pool: {
       connectionString: process.env.DATABASE_URI || '',
     },
-    // Auto-sync schema with collection definitions. Set to false once you
-    // start using explicit migrations (recommended for long-term production).
+    // Auto-sync schema with collection definitions. Set PAYLOAD_DB_PUSH=false
+    // once you start using explicit migrations (recommended for long-term
+    // production). Default: push enabled so first-deploy creates the schema.
     push: process.env.PAYLOAD_DB_PUSH !== 'false',
+    prodMigrations: undefined,
   }),
   sharp,
   cors: process.env.CORS_ORIGINS?.split(',').map((s) => s.trim()) ?? '*',
