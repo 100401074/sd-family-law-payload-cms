@@ -43,7 +43,7 @@ EXPOSE 3000
 ENV PORT=3000
 ENV HOSTNAME=0.0.0.0
 
-HEALTHCHECK --interval=30s --timeout=5s --start-period=30s --retries=3 \
-  CMD wget -q -O /dev/null http://localhost:3000/admin/login || exit 1
+# No HEALTHCHECK directive — Coolify proxy routes requests once the container is
+# up; Next.js standalone has no quick healthcheck endpoint that doesn't redirect.
 
 CMD ["node", "server.js"]
