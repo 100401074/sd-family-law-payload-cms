@@ -36,4 +36,8 @@ HEALTHCHECK --interval=15s --timeout=10s --start-period=180s --retries=5 \
 # Boot: run scripts/boot.ts which calls payload.init() to push the schema,
 # then start Next.js. The boot script is idempotent — safe to run on every
 # container start.
-CMD ["sh", "-c", "node --experimental-strip-types --no-warnings scripts/boot.ts || (echo '[boot] strip-types failed, falling back to tsx' && npx tsx scripts/boot.ts); npm run start"]
+# Use tsx + tsconfig-paths so @payload-config alias resolves; npx invokes the
+# local tsx binary. Forces NODE_ENV=development for the boot step only so
+# Payload's push-on-init logic activates; the npm run start step runs with
+# NODE_ENV=production (the default ENV).
+CMD ["sh", "-c", "NODE_ENV=development npx tsx --tsconfig tsconfig.json scripts/boot.ts && npm run start"]
