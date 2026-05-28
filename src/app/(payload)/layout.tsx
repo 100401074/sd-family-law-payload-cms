@@ -6,18 +6,10 @@ import React from 'react';
 import { importMap } from './admin/importMap.js';
 import './custom.scss';
 
-import type { ServerFunctionClient } from 'payload';
-import { handleServerFunctions } from '@payloadcms/next/utilities';
-
 type Args = { children: React.ReactNode };
 
-const serverFunction: ServerFunctionClient = async function (args) {
-  'use server';
-  return handleServerFunctions({ ...args, config, importMap });
-};
-
 const Layout = ({ children }: Args) => (
-  <RootLayout config={config} importMap={importMap} serverFunction={serverFunction}>
+  <RootLayout config={config} importMap={importMap}>
     {children}
   </RootLayout>
 );
