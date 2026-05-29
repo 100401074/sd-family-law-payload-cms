@@ -199,7 +199,7 @@ export const Articles: CollectionConfig = {
         // ────────────────────────────────────────────────────────────────
         {
           label: 'Comparison',
-          description: 'Used when page_type = "comparison". Renders the split-spread.',
+          description: 'Used when page_type = "comparison". Renders the split-spread. Fields optional so non-comparison articles validate.',
           fields: [
             {
               name: 'comparison',
@@ -211,13 +211,13 @@ export const Articles: CollectionConfig = {
                   label: 'Option A',
                   fields: [
                     { name: 'kicker', type: 'text' },
-                    { name: 'name', type: 'text', required: true },
+                    { name: 'name', type: 'text' },
                     { name: 'statuteBasis', type: 'text' },
-                    { name: 'summary', type: 'textarea', required: true },
+                    { name: 'summary', type: 'textarea' },
                     {
                       name: 'whenItFits',
                       type: 'array',
-                      fields: [{ name: 'item', type: 'text', required: true }],
+                      fields: [{ name: 'item', type: 'text' }],
                     },
                   ],
                 },
@@ -227,13 +227,13 @@ export const Articles: CollectionConfig = {
                   label: 'Option B',
                   fields: [
                     { name: 'kicker', type: 'text' },
-                    { name: 'name', type: 'text', required: true },
+                    { name: 'name', type: 'text' },
                     { name: 'statuteBasis', type: 'text' },
-                    { name: 'summary', type: 'textarea', required: true },
+                    { name: 'summary', type: 'textarea' },
                     {
                       name: 'whenItFits',
                       type: 'array',
-                      fields: [{ name: 'item', type: 'text', required: true }],
+                      fields: [{ name: 'item', type: 'text' }],
                     },
                   ],
                 },
@@ -254,8 +254,8 @@ export const Articles: CollectionConfig = {
               type: 'array',
               labels: { singular: 'Step', plural: 'Steps' },
               fields: [
-                { name: 'title', type: 'text', required: true },
-                { name: 'body', type: 'textarea', required: true, admin: { description: 'HTML allowed.' } },
+                { name: 'title', type: 'text' },
+                { name: 'body', type: 'textarea', admin: { description: 'HTML allowed.' } },
                 { name: 'duration', type: 'text', admin: { description: 'e.g., "6-12 weeks"' } },
                 { name: 'form', type: 'text', admin: { description: 'e.g., "FL-100"' } },
                 { name: 'cost', type: 'text', admin: { description: 'e.g., "$435 (waivable)"' } },
